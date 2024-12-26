@@ -1,0 +1,23 @@
+syntax = "proto3";
+package pb;
+/*
+   这是一个测试proto
+   cd protobuf/proto && protoc --go_out=. api_relay.proto && cd -
+*/
+
+//表示目标文件生成的路径, go的包名就是最后的目录名
+
+option go_package = "../pb";
+
+message RelayErrData {
+  RelayErrDetailData error = 1;
+}
+
+message RelayErrDetailData {
+  string message = 1;
+  string type = 2;
+  string param = 3;
+  string code = 4;
+}
+
+

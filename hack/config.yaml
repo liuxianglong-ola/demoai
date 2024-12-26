@@ -4,7 +4,7 @@
 gfcli:
   gen:
     dao:
-      - link: "mysql:root:123456@tcp(127.0.0.1:3306)/demo"
-        tables: ""
+      - link: "mysql:root:123456@tcp(mysql:3306)/oneapi"
+        tables: "tokens,channels,abilities"
         path: "./internal"
         jsonCase: "Snake"

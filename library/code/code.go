@@ -2,13 +2,12 @@ package code
 
 import (
 	"context"
+	"demogogo/internal/model"
 	"fmt"
 
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/i18n/gi18n"
-
-	"pp-server/internal/model"
 
 	"strconv"
 	"strings"
@@ -17,14 +16,7 @@ import (
 const (
 	SuccessCode = 0
 	CommonCode  = iota + 9
-	GuestCode
-	RiskCode
-	PhotoapplyCode
-	MemberCode
-	ReportCode
-	IdentityCode
-	LoginCode    = 18 //因为有特殊判断，login这块必须为18
-	WithdrawCode = 19
+	RelayCode
 )
 
 type ICfg interface {
@@ -41,38 +33,9 @@ var CodeMap = map[string]ICfg{
 		Cfg:     commonMap,
 		PreCode: CommonCode,
 	},
-
-	"guest": &BaseSystemCfg{
-		Cfg:     guestMap,
-		PreCode: GuestCode,
-	},
-	"risk": &BaseSystemCfg{
-		Cfg:     riskMap,
-		PreCode: RiskCode,
-	},
-	"photoapply": &BaseSystemCfg{
-		Cfg:     photoapplyMap,
-		PreCode: PhotoapplyCode,
-	},
-	"login": &BaseSystemCfg{
-		Cfg:     loginMap,
-		PreCode: LoginCode,
-	},
-	"member": &BaseSystemCfg{
-		Cfg:     memberMap,
-		PreCode: MemberCode,
-	},
-	"report": &BaseSystemCfg{
-		Cfg:     reportMap,
-		PreCode: ReportCode,
-	},
-	"identity": &BaseSystemCfg{
-		Cfg:     identityMap,
-		PreCode: IdentityCode,
-	},
-	"withdraw": &BaseSystemCfg{
-		Cfg:     withdrawMap,
-		PreCode: WithdrawCode,
+	"relay": &BaseSystemCfg{
+		Cfg:     relayMap,
+		PreCode: RelayCode,
 	},
 }
 var CodeError = new(codeError)

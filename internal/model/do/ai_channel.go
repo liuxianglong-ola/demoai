@@ -13,6 +13,7 @@ type AiChannel struct {
 	g.Meta       `orm:"table:ai_channel, do:true"`
 	Id           interface{} // 自增id
 	Key          interface{} // 密钥
+	Type         interface{} //
 	Status       interface{} // 状态
 	Name         interface{} // 名称
 	CreatedTime  interface{} // 创建时间

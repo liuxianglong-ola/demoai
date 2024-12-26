@@ -33,11 +33,11 @@ database:
     level: "all"
     stdout: true
   default:
-    - link: "mysql:root:123456@tcp(mysql:3306)/demo"
+    - link: "mysql:root:123456@tcp(mysql:3306)/oneapi"
       role: "master"
       charset: "utf8mb4"
       debug: true
-    - link: "mysql:root:123456@tcp(mysql:3306)/demo"
+    - link: "mysql:root:123456@tcp(mysql:3306)/oneapi"
       role: "slave"
       debug: true
       charset: "utf8mb4"

@@ -5,7 +5,9 @@
 package dao
 
 import (
+	"context"
 	"demogogo/internal/dao/internal"
+	"demogogo/internal/model/entity"
 )
 
 // internalAiChannelDao is internal type for wrapping internal DAO implements.
@@ -25,3 +27,11 @@ var (
 )
 
 // Fill with you ideas below.
+
+func (m *aiChannelDao) GetRecord(ctx context.Context, id int64) (e *entity.AiChannel, err error) {
+	err = m.Ctx(ctx).Where("id=?", id).Scan(&e)
+	if err != nil {
+		return nil, err
+	}
+	return e, nil
+}

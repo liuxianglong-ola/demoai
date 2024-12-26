@@ -8,6 +8,7 @@ package entity
 type AiChannel struct {
 	Id           int64  `json:"id"            orm:"id"            ` // 自增id
 	Key          string `json:"key"           orm:"key"           ` // 密钥
+	Type         int    `json:"type"          orm:"type"          ` //
 	Status       int    `json:"status"        orm:"status"        ` // 状态
 	Name         string `json:"name"          orm:"name"          ` // 名称
 	CreatedTime  int64  `json:"created_time"  orm:"created_time"  ` // 创建时间

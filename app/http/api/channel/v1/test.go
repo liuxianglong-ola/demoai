@@ -6,8 +6,10 @@ import (
 
 type TestReq struct {
 	g.Meta `path:"/channel/test" tags:"channel" method:"get" summary:"渠道测试"`
-	Id     int64 `v:"required" dc:"id" json:"id"`
-	Model  int64 `v:"required" dc:"模型" json:"model"`
+	Id     int64  `v:"required" dc:"id" json:"id"`
+	Model  string `v:"required" dc:"模型" json:"model"`
+	Type   int    `json:"type"`
+	Key    string `json:"key"`
 }
 
 type TestRes struct {

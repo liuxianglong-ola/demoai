@@ -22,6 +22,7 @@ type AiChannelDao struct {
 type AiChannelColumns struct {
 	Id           string // 自增id
 	Key          string // 密钥
+	Type         string //
 	Status       string // 状态
 	Name         string // 名称
 	CreatedTime  string // 创建时间
@@ -38,6 +39,7 @@ type AiChannelColumns struct {
 var aiChannelColumns = AiChannelColumns{
 	Id:           "id",
 	Key:          "key",
+	Type:         "type",
 	Status:       "status",
 	Name:         "name",
 	CreatedTime:  "created_time",

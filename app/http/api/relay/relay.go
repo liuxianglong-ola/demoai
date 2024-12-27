@@ -13,4 +13,5 @@ import (
 type IRelayV1 interface {
 	ChatCompletions(ctx context.Context, req *v1.ChatCompletionsReq) (res *v1.ChatCompletionsRes, err error)
 	Completions(ctx context.Context, req *v1.CompletionsReq) (res *v1.CompletionsRes, err error)
+	Embeddings(ctx context.Context, req *v1.EmbeddingsReq) (res *v1.EmbeddingsRes, err error)
 }

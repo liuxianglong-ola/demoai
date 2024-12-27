@@ -174,40 +174,40 @@ func ConvertEmbeddingRequest(request model.GeneralOpenAIRequest) *EmbeddingReque
 }
 
 func EmbeddingHandler(c context.Context, resp *http.Response) (*model.ErrorWithStatusCode, *model.Usage) {
-	//@todo 接入后删除
-	return nil, nil
-	//var ollamaResponse EmbeddingResponse
-	//err := json.NewDecoder(resp.Body).Decode(&ollamaResponse)
-	//if err != nil {
-	//	return openai.ErrorWrapper(err, "unmarshal_response_body_failed", http.StatusInternalServerError), nil
-	//}
-	//
-	//err = resp.Body.Close()
-	//if err != nil {
-	//	return openai.ErrorWrapper(err, "close_response_body_failed", http.StatusInternalServerError), nil
-	//}
-	//
-	//if ollamaResponse.Error != "" {
-	//	return &model.ErrorWithStatusCode{
-	//		Error: model.Error{
-	//			Message: ollamaResponse.Error,
-	//			Type:    "ollama_error",
-	//			Param:   "",
-	//			Code:    "ollama_error",
-	//		},
-	//		StatusCode: resp.StatusCode,
-	//	}, nil
-	//}
-	//
-	//fullTextResponse := embeddingResponseOllama2OpenAI(&ollamaResponse)
-	//jsonResponse, err := json.Marshal(fullTextResponse)
-	//if err != nil {
-	//	return openai.ErrorWrapper(err, "marshal_response_body_failed", http.StatusInternalServerError), nil
-	//}
+	var ollamaResponse EmbeddingResponse
+	err := json.NewDecoder(resp.Body).Decode(&ollamaResponse)
+	if err != nil {
+		return openai.ErrorWrapper(err, "unmarshal_response_body_failed", http.StatusInternalServerError), nil
+	}
+
+	err = resp.Body.Close()
+	if err != nil {
+		return openai.ErrorWrapper(err, "close_response_body_failed", http.StatusInternalServerError), nil
+	}
+
+	if ollamaResponse.Error != "" {
+		return &model.ErrorWithStatusCode{
+			Error: model.Error{
+				Message: ollamaResponse.Error,
+				Type:    "ollama_error",
+				Param:   "",
+				Code:    "ollama_error",
+			},
+			StatusCode: resp.StatusCode,
+		}, nil
+	}
+
+	fullTextResponse := embeddingResponseOllama2OpenAI(&ollamaResponse)
+	jsonResponse, err := json.Marshal(fullTextResponse)
+	if err != nil {
+		return openai.ErrorWrapper(err, "marshal_response_body_failed", http.StatusInternalServerError), nil
+	}
+	r := g.RequestFromCtx(c)
+	r.Response.WriteJson(jsonResponse)
 	//c.Writer.Header().Set("Content-Type", "application/json")
 	//c.Writer.WriteHeader(resp.StatusCode)
 	//_, err = c.Writer.Write(jsonResponse)
-	//return nil, &fullTextResponse.Usage
+	return nil, &fullTextResponse.Usage
 }
 
 func embeddingResponseOllama2OpenAI(response *EmbeddingResponse) *openai.EmbeddingResponse {

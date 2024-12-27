@@ -40,7 +40,7 @@ type ChatCompletions struct {
 	Functions           any                   `json:"functions,omitempty"`
 }
 
-func ChannelToMeta(token *entity.Tokens, channel *entity.Channels, mode int, reqModel string, stream bool) *meta.Meta {
+func ChannelToMeta(token *entity.Tokens, channel *entity.Channels, mode int, reqModel string) *meta.Meta {
 	meta := meta.Meta{
 		Mode:            mode,
 		ChannelType:     int(channel.Type),
@@ -52,7 +52,6 @@ func ChannelToMeta(token *entity.Tokens, channel *entity.Channels, mode int, req
 		OriginModelName: reqModel,
 		BaseURL:         channel.BaseUrl,
 		APIKey:          channel.Key,
-		IsStream:        stream,
 	}
 
 	if meta.BaseURL == "" {

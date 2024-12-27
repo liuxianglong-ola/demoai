@@ -1,14 +1,20 @@
 package relay
 
 import (
+	"bytes"
 	"context"
 	"demogogo/internal/dao"
 	"demogogo/internal/model"
 	"demogogo/internal/model/entity"
 	"demogogo/internal/service"
 	"demogogo/library/code"
+	"demogogo/library/relay/adaptor"
+	"demogogo/library/relay/meta"
+	relaymodel "demogogo/library/relay/model"
 	"demogogo/utility"
+	"encoding/json"
 	"github.com/gogf/gf/v2/frame/g"
+	"io"
 	"strings"
 )
 
@@ -73,4 +79,29 @@ func (s *sRelay) checkHeaderToken(ctx context.Context, i18n *model.I18n, key str
 		return nil, nil, code.CodeError.ErrorNew(ctx, i18n, code.RelayBadChannel)
 	}
 	return
+}
+
+func (s *sRelay) getRequestBody(ctx context.Context, meta *meta.Meta, textRequest *relaymodel.GeneralOpenAIRequest, adaptor adaptor.Adaptor) (io.Reader, error) {
+	//if meta.APIType == apitype.OpenAI && meta.OriginModelName == meta.ActualModelName && meta.ChannelType != channeltype.Baichuan {
+	//	// no need to convert request for openai
+	//	return c.Request.Body, nil
+	//}
+
+	// get request body
+	var requestBody io.Reader
+	convertedRequest, err := adaptor.ConvertRequest(ctx, meta.Mode, textRequest)
+	if err != nil {
+		g.Log().Debugf(ctx, "converted request failed: %s\n", err.Error())
+		return nil, err
+	}
+	jsonData, err := json.Marshal(convertedRequest)
+	if err != nil {
+		g.Log().Debugf(ctx, "converted request json_marshal_failed: %s\n", err.Error())
+
+		return nil, err
+	}
+	g.Log().Debugf(ctx, "converted request: \n%s", string(jsonData))
+
+	requestBody = bytes.NewBuffer(jsonData)
+	return requestBody, nil
 }

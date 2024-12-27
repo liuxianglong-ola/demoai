@@ -13,6 +13,7 @@ import (
 type (
 	IRelay interface {
 		ChatCompletions(ctx context.Context, req *v1.ChatCompletionsReq) (err error)
+		Embeddings(ctx context.Context, req *v1.EmbeddingsReq) (err error)
 	}
 )
 

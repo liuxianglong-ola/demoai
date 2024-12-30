@@ -2,6 +2,9 @@ package openai
 
 import (
 	"context"
+	"demogogo/library/relay/adaptor/doubao"
+	"demogogo/library/relay/adaptor/minimax"
+	"demogogo/library/relay/adaptor/novita"
 	"errors"
 	"fmt"
 	"io"
@@ -43,13 +46,12 @@ func (a *Adaptor) GetRequestURL(meta *meta.Meta) (string, error) {
 		// {your endpoint}/openai/deployments/{your azure_model}/chat/completions?api-version={api_version}
 		requestURL = fmt.Sprintf("/openai/deployments/%s/%s", model_, task)
 		return GetFullRequestURL(meta.BaseURL, requestURL, meta.ChannelType), nil
-		//@todo 用上再打开
-	//case channeltype.Minimax:
-	//	return minimax.GetRequestURL(meta)
-	//case channeltype.Doubao:
-	//	return doubao.GetRequestURL(meta)
-	//case channeltype.Novita:
-	//	return novita.GetRequestURL(meta)
+	case channeltype.Minimax:
+		return minimax.GetRequestURL(meta)
+	case channeltype.Doubao:
+		return doubao.GetRequestURL(meta)
+	case channeltype.Novita:
+		return novita.GetRequestURL(meta)
 	default:
 		return GetFullRequestURL(meta.BaseURL, meta.RequestURLPath, meta.ChannelType), nil
 	}

@@ -20,7 +20,7 @@ func (s *sRelay) ChatCompletions(ctx context.Context, req *v1.ChatCompletionsReq
 
 	meta := model.ChannelToMeta(ctx, token, channel, mode, req.Model)
 	meta.IsStream = req.Stream
-
+	req.Model = meta.ActualModelName
 	textRequest := &relaymodel.GeneralOpenAIRequest{}
 	utility.CopyFields(req, textRequest)
 	return s.text(ctx, i18n, meta, textRequest)
@@ -35,7 +35,7 @@ func (s *sRelay) Embeddings(ctx context.Context, req *v1.EmbeddingsReq) (err err
 	mode := relaymode.Embeddings
 
 	meta := model.ChannelToMeta(ctx, token, channel, mode, req.Model)
-
+	req.Model = meta.ActualModelName
 	textRequest := &relaymodel.GeneralOpenAIRequest{}
 	utility.CopyFields(req, textRequest)
 	return s.text(ctx, i18n, meta, textRequest)

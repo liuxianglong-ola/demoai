@@ -6,6 +6,8 @@ import (
 	"demogogo/library/relay/channeltype"
 	"demogogo/library/relay/meta"
 	"demogogo/library/relay/model"
+	"encoding/json"
+	"fmt"
 	"github.com/gogf/gf/v2/frame/g"
 )
 
@@ -65,9 +67,28 @@ func ChannelToMeta(ctx context.Context, token *entity.Tokens, channel *entity.Ch
 	}
 	meta.RequestURLPath = r.RequestURI
 	//@todo 如果有配置项映射，这块要加上
+	modelMap := GetModelMapping(ctx, channel)
+	if modelMap != nil && modelMap[reqModel] != "" {
+		reqModel = modelMap[reqModel]
+	}
+
 	meta.ActualModelName = reqModel
+
 	meta.APIType = channeltype.ToAPIType(meta.ChannelType)
 	return &meta
+}
+
+func GetModelMapping(ctx context.Context, channel *entity.Channels) map[string]string {
+	if channel.ModelMapping == "" || channel.ModelMapping == "{}" {
+		return nil
+	}
+	modelMapping := make(map[string]string)
+	err := json.Unmarshal([]byte(channel.ModelMapping), &modelMapping)
+	if err != nil {
+		g.Log().Errorf(ctx, fmt.Sprintf("failed to unmarshal model mapping for channel %d, error: %s", channel.Id, err.Error()))
+		return nil
+	}
+	return modelMapping
 }
 
 type GeneralErrorResponse struct {

@@ -1,10 +1,12 @@
 package model
 
 import (
+	"context"
 	"demogogo/internal/model/entity"
 	"demogogo/library/relay/channeltype"
 	"demogogo/library/relay/meta"
 	"demogogo/library/relay/model"
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 type ChatCompletions struct {
@@ -40,7 +42,7 @@ type ChatCompletions struct {
 	Functions           any                   `json:"functions,omitempty"`
 }
 
-func ChannelToMeta(token *entity.Tokens, channel *entity.Channels, mode int, reqModel string) *meta.Meta {
+func ChannelToMeta(ctx context.Context, token *entity.Tokens, channel *entity.Channels, mode int, reqModel string) *meta.Meta {
 	meta := meta.Meta{
 		Mode:            mode,
 		ChannelType:     int(channel.Type),
@@ -57,9 +59,54 @@ func ChannelToMeta(token *entity.Tokens, channel *entity.Channels, mode int, req
 	if meta.BaseURL == "" {
 		meta.BaseURL = channeltype.ChannelBaseURLs[meta.ChannelType]
 	}
+	r := g.RequestFromCtx(ctx)
 	if meta.Method == "" {
-		meta.Method = "POST"
+		meta.Method = r.Method
 	}
+	meta.RequestURLPath = r.RequestURI
+	//@todo 如果有配置项映射，这块要加上
+	meta.ActualModelName = reqModel
 	meta.APIType = channeltype.ToAPIType(meta.ChannelType)
 	return &meta
+}
+
+type GeneralErrorResponse struct {
+	Error    model.Error `json:"error"`
+	Message  string      `json:"message"`
+	Msg      string      `json:"msg"`
+	Err      string      `json:"err"`
+	ErrorMsg string      `json:"error_msg"`
+	Header   struct {
+		Message string `json:"message"`
+	} `json:"header"`
+	Response struct {
+		Error struct {
+			Message string `json:"message"`
+		} `json:"error"`
+	} `json:"response"`
+}
+
+func (e GeneralErrorResponse) ToMessage() string {
+	if e.Error.Message != "" {
+		return e.Error.Message
+	}
+	if e.Message != "" {
+		return e.Message
+	}
+	if e.Msg != "" {
+		return e.Msg
+	}
+	if e.Err != "" {
+		return e.Err
+	}
+	if e.ErrorMsg != "" {
+		return e.ErrorMsg
+	}
+	if e.Header.Message != "" {
+		return e.Header.Message
+	}
+	if e.Response.Error.Message != "" {
+		return e.Response.Error.Message
+	}
+	return ""
 }

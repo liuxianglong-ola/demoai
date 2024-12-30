@@ -65,7 +65,7 @@ func (s *sMiddleware) AiResponse(r *ghttp.Request) {
 		}
 	}
 
-	r.Response.Flush()
+	//r.Response.Flush()
 	s.buildAiErrorResponse(r, codeErr.Code(), err.Error())
 	r.ExitAll()
 	return
@@ -73,6 +73,7 @@ func (s *sMiddleware) AiResponse(r *ghttp.Request) {
 
 func (s *sMiddleware) buildAiErrorResponse(r *ghttp.Request, code int, message string) {
 	r.Response.Status = http.StatusInternalServerError
+
 	Error := &pb.RelayErrDetailData{
 		Message: message,
 		Type:    "error",

@@ -3,6 +3,7 @@ package relay
 import (
 	"demogogo/library/relay/adaptor"
 	"demogogo/library/relay/adaptor/ollama"
+	"demogogo/library/relay/adaptor/openai"
 	"demogogo/library/relay/apitype"
 )
 
@@ -20,8 +21,8 @@ func GetAdaptor(apiType int) adaptor.Adaptor {
 	//	return &baidu.Adaptor{}
 	//case apitype.Gemini:
 	//	return &gemini.Adaptor{}
-	//case apitype.OpenAI:
-	//	return &openai.Adaptor{}
+	case apitype.OpenAI:
+		return &openai.Adaptor{}
 	//case apitype.PaLM:
 	//	return &palm.Adaptor{}
 	//case apitype.Tencent:

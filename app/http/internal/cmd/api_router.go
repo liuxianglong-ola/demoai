@@ -8,12 +8,14 @@ import (
 )
 
 func apiRouter(group *ghttp.RouterGroup) {
-	group.Middleware(
-		service.Middleware().AiTokenCheck,
-		service.Middleware().AiResponse,
-	)
-	group.Bind(
-		hello.NewV1(),
-		relay.NewV1(),
-	)
+	group.Group("/v1", func(group *ghttp.RouterGroup) {
+		group.Middleware(
+			service.Middleware().AiTokenCheck,
+			service.Middleware().AiResponse,
+		)
+		group.Bind(
+			hello.NewV1(),
+			relay.NewV1(),
+		)
+	})
 }

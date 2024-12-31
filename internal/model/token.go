@@ -66,7 +66,7 @@ func ChannelToMeta(ctx context.Context, token *entity.Tokens, channel *entity.Ch
 		meta.Method = r.Method
 	}
 	meta.RequestURLPath = r.RequestURI
-	//@todo 如果有配置项映射，这块要加上
+
 	modelMap := GetModelMapping(ctx, channel)
 	if modelMap != nil && modelMap[reqModel] != "" {
 		reqModel = modelMap[reqModel]
